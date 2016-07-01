@@ -1,0 +1,57 @@
+{
+  "name": "nist",
+  "version": "1.0.0",
+  "description": "A better npm install",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codedotjs/nist.git"
+  },
+  "author": "Rishi Giri <rushforlinux@gmail.com> (rishigiri.com)",
+  "bin": {
+    "nist": "cli.js"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "cli.js"
+  ],
+  "keywords": [
+    "cli-app",
+    "cli",
+    "npm",
+    "install",
+    "npm-install",
+    "better",
+    "update",
+    "find",
+    "publish"
+  ],
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "cheerio": "^0.20.0",
+    "curver": "*",
+    "exec": "*",
+    "got": "*",
+    "http": "*",
+    "log-update": "*",
+    "packages-by": "*",
+    "packstat": "*",
+    "pinkie-promise": "^2.0.1",
+    "total-release": "*",
+    "whatiz": "*"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "xo": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/codedotjs/nist/issues"
+  },
+  "homepage": "https://github.com/codedotjs/nist#readme",
+  "main": "cli.js"
+}
