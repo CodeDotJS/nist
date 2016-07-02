@@ -17,9 +17,16 @@ const pb = require('packages-by');
 const got = require('got');
 
 const arg = process.argv[2];
+const getArg = process.argv[3];
+
 const getDir = os.homedir();
+
 const addPath = '/node_modules/';
 const joinPath = `${getDir}${addPath}`;
+
+const nodeVersion = process.versions.node;
+
+const pre = `${chalk.bold.cyan('›')} `;
 
 if (!arg || arg === '--help' || arg === '-h') {
 	console.log(
@@ -57,11 +64,235 @@ if (!arg || arg === '--help' || arg === '-h') {
 		`);
 }
 
-const nodeVersion = process.versions.node;
-const pre = `${chalk.bold.cyan('›')} `;
+if (arg === '--exist' || arg === '-e') {
+	const fullPath = joinPath + getArg;
+	const putMess = `${pre}${chalk.bold.cyan('npm install')} ${chalk.bold.cyan(getArg)}`;
 
-if (arg === '--version' || arg === '-v') {
-	console.log(chalk.bold.cyan(`\n${pre}Current nist version:`, require('./package.json').version, `\n`));
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		process.exit(1);
+	}
+
+	if (!fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`Sorry! could not find ${chalk.bold(arg)} in ${chalk.bold(joinPath)}\n\n${putMess}`)}\n`);
+	}
+
+	if (fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(arg)} is available in ${chalk.bold(joinPath)}`)}\n`);
+	}
+}
+
+if (arg === '-a' || arg === '--avail') {
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+	const url = 'https://npmjs.com/package/' + getArg;
+	logUpdate(`\n${pre}${chalk.dim(`Checking whether ${chalk.bold(getArg)} is available or not. Please wait`)}\n`);
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		process.exit(1);
+	}
+
+	got(url).then(res => {
+		if (res.statusCode === 200) {
+			logUpdate(`\n${pre}${chalk.dim(`Package name ${chalk.bold(getArg)} is not available`)}\n`);
+		}
+	}).catch(err => {
+		if (err) {
+			logUpdate(`\n${pre}${chalk.dim(`Aha! package name ${chalk.bold(getArg)} is available`)}\n`);
+			process.exit(1);
+		}
+	});
+}
+
+if (arg === '-b' || arg === '--by') {
+	logUpdate(`\n${pre}${chalk.dim(`Fetching packages count. Please wait`)}\n`);
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Username required`)}\n`);
+		process.exit(1);
+	}
+
+	pb(getArg).then(user => {
+		const inf = [];
+		const packageVersion = (prefix, key) => {
+			if (user[key]) {
+				inf.push(`${prefix} has ${chalk.bold(user[key])}`);
+			}
+		};
+		logUpdate();
+		packageVersion(`${pre}NPM user ${chalk.bold(getArg)}`, 'packages');
+		console.log(inf.join('\n'));
+		console.log();
+	});
+}
+
+if (arg === '--diff' || arg === '-d') {
+	let fullPath = joinPath + getArg;
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		process.exit(1);
+	}
+
+	if (!fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package ${chalk.bold.green(getArg)} does not exists`)}\n`);
+		process.exit(1);
+	}
+
+	if (fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`Comparing package version. Please wait`)}\n`);
+		const homePackage = require(fullPath + '/package.json').version;
+		curver(process.argv[3]).then(user => {
+			const inf = [];
+			const packageVersion = (prefix, key) => {
+				if (user[key]) {
+					inf.push(`${prefix} is ${chalk.bold(user[key])} and you using version ${chalk.bold(homePackage)}`);
+				}
+			};
+			logUpdate();
+			packageVersion(`${pre}Latest vesrion of ${chalk.bold(getArg)}`, 'version');
+			console.log(inf.join('\n'));
+			console.log();
+		});
+	}
+}
+
+if (arg === '--current' || arg === '-c') {
+	let fullPath = joinPath + getArg;
+	const comm = chalk.bold(getArg);
+	const putMess = chalk.green(` Use ${chalk.bold.green('npm install')} ${comm} to install the package`);
+
+	if (fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}Installed version of ${chalk.bold(comm)}  : `, chalk.bold(require(fullPath + '/package.json').version, '\n'));
+	} else {
+		logUpdate(`\n${pre}${chalk.bold.cyan(`Package "${chalk.green.bold(comm)}" is not installed`)}\n\n ${putMess}\n`);
+	}
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+	}
+}
+
+if (arg === '--latest' || arg === '-l') {
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+	logUpdate(`\n${pre}${chalk.dim(`Fetching ${chalk.bold(getArg)}\'s latest version from npmjs`)}\n`);
+	curver(getArg).then(user => {
+		const inf = [];
+		const packageVersion = (prefix, key) => {
+			if (user[key]) {
+				inf.push(`${prefix} : ${chalk.bold(user[key])}`);
+			}
+		};
+		logUpdate();
+		packageVersion(`${pre}Latest vesrion of ${chalk.bold(getArg)}`, 'version');
+		console.log(inf.join('\n'));
+		console.log();
+	});
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+	}
+}
+
+if (arg === '--stat' || arg === '-s') {
+	logUpdate(`\n${pre}${chalk.dim('Fetching download stats from npmjs')}\n`);
+	packstat(getArg).then(user => {
+		const inf = [];
+		const packageRow = (prefix, key) => {
+			if (user[key]) {
+				inf.push(`${prefix}➠ ${user[key]}`);
+			}
+		};
+		logUpdate();
+		packageRow(`${pre}Last Day    `, 'lastDay');
+		packageRow(`${pre}Last Week   `, 'lastWeek');
+		packageRow(`${pre}Last Month  `, 'lastMonth');
+		console.log(inf.join('\n'));
+		console.log();
+	});
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+	}
+}
+
+if (arg === '--total' || arg === '-t') {
+	logUpdate(`\n${pre}${chalk.dim(`Fetching total releases of ${chalk.bold(getArg)} from npmjs. Please wait`)}\n`);
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+	tr(getArg).then(user => {
+		const inf = [];
+		const countRow = (prefix, key) => {
+			if (user[key]) {
+				inf.push(`${prefix}${chalk.bold(user[key])}${chalk.bold(' releases')}`);
+			}
+		};
+		logUpdate();
+		countRow(`${pre}${chalk.bold(getArg)} has total `, 'releases');
+		console.log(inf.join('\n'));
+		console.log();
+	});
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+	}
+}
+
+if (arg === '--what' || arg === '-w') {
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+	let fullPath = joinPath + getArg;
+	if (!fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`Pakcage ${chalk.bold(getArg)} is not installed. Fetching it's description from npmjs`)}\n`);
+		whatiz(getArg).then(user => {
+			const inf = [];
+			const countRow = (prefix, key) => {
+				if (user[key]) {
+					inf.push(`${prefix}:  ${user[key]}`);
+				}
+			};
+			logUpdate();
+			countRow(`${pre}${getArg}  `, 'info');
+			console.log(inf.join('\n'));
+			console.log();
+		});
+	}
+
+	if (fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${getArg}  :  `, require(fullPath + '/package.json').description, '\n');
+	}
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+	}
 }
 
 if (arg === '--node' || arg === '-n') {
@@ -96,239 +327,6 @@ if (arg === '-nv' || arg === '--npm') {
 	exec('npm -v', puts);
 }
 
-if (arg === '--stat' || arg === '-s') {
-	logUpdate(`\n${pre}${chalk.dim('Fetching download stats from npmjs')}\n`);
-	packstat(process.argv[3]).then(user => {
-		const inf = [];
-		const packageRow = (prefix, key) => {
-			if (user[key]) {
-				inf.push(`${prefix}➠ ${user[key]}`);
-			}
-		};
-		logUpdate();
-		packageRow(`${pre}Last Day    `, 'lastDay');
-		packageRow(`${pre}Last Week   `, 'lastWeek');
-		packageRow(`${pre}Last Month  `, 'lastMonth');
-		console.log(inf.join('\n'));
-		console.log();
-	});
-	if (!process.argv[3]) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
-	}
-}
-
-if (arg === '--total' || arg === '-t') {
-	logUpdate(`\n${pre}${chalk.dim('Please wait')}\n`);
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-	tr(process.argv[3]).then(user => {
-		const inf = [];
-		const countRow = (prefix, key) => {
-			if (user[key]) {
-				inf.push(`${prefix}➠  ${user[key]}`);
-			}
-		};
-		logUpdate();
-		countRow(`${pre}Total Release  `, 'releases');
-		console.log(inf.join('\n'));
-		console.log();
-	});
-	if (!process.argv[3]) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
-	}
-}
-
-if (arg === '--what' || arg === '-w') {
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-	let fullPath = joinPath + process.argv[3];
-	const getArg = process.argv[3];
-	if (!fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Pakcage ${chalk.bold(getArg)} is not installed. Fetching it's description from npmjs`)}\n`);
-		whatiz(getArg).then(user => {
-			const inf = [];
-			const countRow = (prefix, key) => {
-				if (user[key]) {
-					inf.push(`${prefix}:  ${user[key]}`);
-				}
-			};
-			logUpdate();
-			countRow(`${pre}${getArg}  `, 'info');
-			console.log(inf.join('\n'));
-			console.log();
-		});
-	}
-
-	if (fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${getArg}  :  `, require(fullPath + '/package.json').description, '\n');
-	}
-
-	if (!process.argv[3]) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
-	}
-}
-
-if (arg === '--latest' || arg === '-l') {
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-	const arg = process.argv[3];
-	logUpdate(`\n${pre}${chalk.dim(`Fetching ${chalk.bold(arg)}\'s latest version from npmjs`)}\n`);
-	curver(process.argv[3]).then(user => {
-		const inf = [];
-		const packageVersion = (prefix, key) => {
-			if (user[key]) {
-				inf.push(`${prefix} : ${chalk.bold(user[key])}`);
-			}
-		};
-		logUpdate();
-		packageVersion(`${pre}Latest vesrion of ${chalk.bold(arg)}`, 'version');
-		console.log(inf.join('\n'));
-		console.log();
-	});
-
-	if (!process.argv[3]) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
-	}
-}
-
-if (arg === '--current' || arg === '-c') {
-	let fullPath = joinPath + process.argv[3];
-	const comm = chalk.bold(process.argv[3]);
-	const putMess = chalk.green(` Use ${chalk.bold.green('npm install')} ${comm} to install the package`);
-
-	if (fs.existsSync(fullPath)) {
-		console.log(`\n${pre}Installed version of ${chalk.bold(comm)}  : `, chalk.bold(require(fullPath + '/package.json').version, '\n'));
-	} else {
-		logUpdate(`\n${pre}${chalk.bold.cyan(`Package "${chalk.green.bold(comm)}" is not installed`)}\n\n ${putMess}\n`);
-	}
-
-	if (!process.argv[3]) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
-	}
-}
-
-if (arg === '--diff' || arg === '-d') {
-	const arg = process.argv[3];
-	let fullPath = joinPath + arg;
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-
-	if (!arg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
-		process.exit(1);
-	}
-
-	if (!fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package ${chalk.bold.green(arg)} does not exists`)}\n`);
-		process.exit(1);
-	}
-
-	if (fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Comparing package version. Please wait`)}\n`);
-		const homePackage = require(fullPath + '/package.json').version;
-		curver(process.argv[3]).then(user => {
-			const inf = [];
-			const packageVersion = (prefix, key) => {
-				if (user[key]) {
-					inf.push(`${prefix} is ${chalk.bold(user[key])} and you using version ${chalk.bold(homePackage)}`);
-				}
-			};
-			logUpdate();
-			packageVersion(`${pre}Latest vesrion of ${chalk.bold(arg)}`, 'version');
-			console.log(inf.join('\n'));
-			console.log();
-		});
-	}
-}
-
-if (arg === '-a' || arg === '--avail') {
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-	const arg = process.argv[3];
-	const url = 'https://npmjs.com/package/' + arg;
-	logUpdate(`\n${pre}${chalk.dim(`Checking whether ${chalk.bold(arg)} is available or not. Please wait`)}\n`);
-
-	if (!arg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
-		process.exit(1);
-	}
-
-	got(url).then(res => {
-		if (res.statusCode === 200) {
-			logUpdate(`\n${pre}${chalk.dim(`Package name ${chalk.bold(arg)} is not available`)}\n`);
-		}
-	}).catch(err => {
-		if (err) {
-			logUpdate(`\n${pre}${chalk.dim(`Aha! package name ${chalk.bold(arg)} is available`)}\n`);
-			process.exit(1);
-		}
-	});
-}
-
-if (arg === '-b' || arg === '--by') {
-	const arg = process.argv[3];
-	logUpdate(`\n${pre}${chalk.dim(`Fetching packages count. Please wait`)}\n`);
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-
-	if (!arg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
-		process.exit(1);
-	}
-
-	pb(process.argv[3]).then(user => {
-		const inf = [];
-		const packageVersion = (prefix, key) => {
-			if (user[key]) {
-				inf.push(`${prefix} has ${chalk.bold(user[key])}`);
-			}
-		};
-		logUpdate();
-		packageVersion(`${pre}NPM user ${chalk.bold(arg)}`, 'packages');
-		console.log(inf.join('\n'));
-		console.log();
-	});
-}
-
-if (arg === '--exist' || arg === '-e') {
-	const arg = process.argv[3];
-	const fullPath = joinPath + arg;
-	const putMess = `${pre}${chalk.bold.cyan('npm install')} ${chalk.bold.cyan(arg)}`;
-
-	if (!arg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
-		process.exit(1);
-	}
-
-	if (!fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Sorry! could not find ${chalk.bold(arg)} in ${chalk.bold(joinPath)}\n\n${putMess}`)}\n`);
-	}
-
-	if (fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(arg)} is available in ${chalk.bold(joinPath)}`)}\n`);
-	}
+if (arg === '--version' || arg === '-v') {
+	console.log(chalk.bold.cyan(`\n${pre}Current nist version:`, require('./package.json').version, `\n`));
 }
