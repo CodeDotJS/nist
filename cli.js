@@ -74,11 +74,11 @@ if (arg === '--exist' || arg === '-e') {
 	}
 
 	if (!fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Sorry! could not find ${chalk.bold(arg)} in ${chalk.bold(joinPath)}\n\n${putMess}`)}\n`);
+		logUpdate(`\n${pre}${chalk.dim(`Sorry! could not find ${chalk.bold(getArg)} in ${chalk.bold(joinPath)}\n\n${putMess}`)}\n`);
 	}
 
 	if (fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(arg)} is available in ${chalk.bold(joinPath)}`)}\n`);
+		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(getArg)} is available in ${chalk.bold(joinPath)}`)}\n`);
 	}
 }
 
