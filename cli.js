@@ -23,6 +23,9 @@ const getDir = os.homedir();
 
 const addPath = '/node_modules/';
 const joinPath = `${getDir}${addPath}`;
+const fullPath = joinPath + getArg;
+
+const url = 'https://npmjs.com/package/' + getArg;
 
 const nodeVersion = process.versions.node;
 
@@ -37,6 +40,7 @@ if (!arg || arg === '--help' || arg === '-h') {
   -i, --install : install packages
   -e, --exist   : Check wheather the package is installed or not
   -g, --global  : install package directly in ${joinPath}
+  -u, --update  : update package to latest version
 
   ${chalk.bold.cyan('Publish:')}
   -p, --publish : publish your module
@@ -56,7 +60,7 @@ if (!arg || arg === '--help' || arg === '-h') {
   ${chalk.bold.cyan('Version:')}
   -n, --node    : get current node version
   -z, --nolat   : get the latest node version from nodejs.org
-  -nv, --npm    : get npm vesrion
+  -nv, --npm    : get npm version
 
   ${chalk.bold.cyan('Nist :')}
   -v, --version : display version
@@ -64,8 +68,27 @@ if (!arg || arg === '--help' || arg === '-h') {
 		`);
 }
 
+if (arg === '-i' || arg === '--install') {
+	const putMess = `${pre}${chalk.green.bold('run')} ${chalk.bold.cyan('nist -u')} ${chalk.bold.cyan(getArg)} ${chalk.green.bold('to update the package')}\n`;
+
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		process.exit(1);
+	}
+
+	if (!fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`installing ${chalk.bold(getArg)} - please wait!`)}\n`);
+		// continue process...
+	}
+
+	if (fs.existsSync(fullPath)) {
+		logUpdate(`\n${pre}${chalk.bold.cyan(`Package is already installed`)}\n`);
+		console.log(`${putMess}`);
+		process.exit(1);
+	}
+}
+
 if (arg === '--exist' || arg === '-e') {
-	const fullPath = joinPath + getArg;
 	const putMess = `${pre}${chalk.bold.cyan('npm install')} ${chalk.bold.cyan(getArg)}`;
 
 	if (!getArg) {
@@ -89,7 +112,6 @@ if (arg === '-a' || arg === '--avail') {
 			process.exit(1);
 		}
 	});
-	const url = 'https://npmjs.com/package/' + getArg;
 	logUpdate(`\n${pre}${chalk.dim(`Checking whether ${chalk.bold(getArg)} is available or not. Please wait`)}\n`);
 
 	if (!getArg) {
@@ -138,7 +160,6 @@ if (arg === '-b' || arg === '--by') {
 }
 
 if (arg === '--diff' || arg === '-d') {
-	let fullPath = joinPath + getArg;
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
 			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
@@ -167,7 +188,7 @@ if (arg === '--diff' || arg === '-d') {
 				}
 			};
 			logUpdate();
-			packageVersion(`${pre}Latest vesrion of ${chalk.bold(getArg)}`, 'version');
+			packageVersion(`${pre}Latest version of ${chalk.bold(getArg)}`, 'version');
 			console.log(inf.join('\n'));
 			console.log();
 		});
@@ -175,7 +196,6 @@ if (arg === '--diff' || arg === '-d') {
 }
 
 if (arg === '--current' || arg === '-c') {
-	let fullPath = joinPath + getArg;
 	const comm = chalk.bold(getArg);
 	const putMess = chalk.green(` Use ${chalk.bold.green('npm install')} ${comm} to install the package`);
 
@@ -206,7 +226,7 @@ if (arg === '--latest' || arg === '-l') {
 			}
 		};
 		logUpdate();
-		packageVersion(`${pre}Latest vesrion of ${chalk.bold(getArg)}`, 'version');
+		packageVersion(`${pre}Latest version of ${chalk.bold(getArg)}`, 'version');
 		console.log(inf.join('\n'));
 		console.log();
 	});
@@ -269,7 +289,6 @@ if (arg === '--what' || arg === '-w') {
 			process.exit(1);
 		}
 	});
-	let fullPath = joinPath + getArg;
 	if (!fs.existsSync(fullPath)) {
 		logUpdate(`\n${pre}${chalk.dim(`Pakcage ${chalk.bold(getArg)} is not installed. Fetching it's description from npmjs`)}\n`);
 		whatiz(getArg).then(user => {
