@@ -1,7 +1,7 @@
 {
   "name": "nist",
   "version": "1.0.0",
-  "description": "A better npm install",
+  "description": "node package installer and informer",
   "license": "MIT",
   "repository": {
     "type": "git",

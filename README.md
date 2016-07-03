@@ -6,7 +6,7 @@
 	<br>
 </h1>
 
-> :snowflake: A little different npm install and more :snowflake:
+> :snowflake: node package installer and informer
 
 [![Build Status](https://travis-ci.org/CodeDotJS/nist.svg?branch=master)](https://travis-ci.org/CodeDotJS/nist)
 
