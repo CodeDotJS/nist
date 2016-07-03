@@ -71,6 +71,13 @@ if (!arg || arg === '--help' || arg === '-h') {
 if (arg === '-i' || arg === '--install') {
 	const putMess = `${pre}${chalk.green.bold('run')} ${chalk.bold.cyan('nist -u')} ${chalk.bold.cyan(getArg)} ${chalk.green.bold('to update the package')}\n`;
 
+	dns.lookup('npmjs.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		}
+	});
+
 	if (!getArg) {
 		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
 		process.exit(1);
