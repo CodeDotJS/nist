@@ -39,6 +39,7 @@ $ sudo npm install --global nist
   -i, --install : install packages
   -e, --exist   : Check wheather the package is installed or not
   -g, --global  : install package directly in /home/rishi/node_modules/
+  -u, --update  : update package to latest version
 
   Publish:
   -p, --publish : publish your module
@@ -58,7 +59,7 @@ $ sudo npm install --global nist
   Version:
   -n, --node    : get current node version
   -z, --nolat   : get the latest node version from nodejs.org
-  -nv, --npm    : get npm vesrion
+  -nv, --npm    : get npm version
 
   Nist :
   -v, --version : display version
