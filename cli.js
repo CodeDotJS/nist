@@ -34,8 +34,8 @@ const pre = `${chalk.bold.cyan('›')} `;
 if (!arg || arg === '--help' || arg === '-h') {
 	console.log(
 		`
- Usage: nist -i <package-name>
-
+ Usage: nist <command> <package-name>
+ 
   ${chalk.bold.cyan('Install:')}
   -i, --install : install packages
   -e, --exist   : Check wheather the package is installed or not
