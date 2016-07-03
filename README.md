@@ -33,18 +33,19 @@ $ sudo npm install --global nist
 ## Usage
 
 ```
- Usage: nist <package-name>
+ Usage: nist -i <package-name>
 
   Install:
   -i, --install : install packages
   -e, --exist   : Check wheather the package is installed or not
-  -g, --global  : install package directly in /home/{user_directory}/node_modules/
+  -g, --global  : install package directly in /home/rishi/node_modules/
 
   Publish:
   -p, --publish : publish your module
 
   Packages:
   -a, --avail   : check is package name is available
+  -b, --by      : total packages published by a npmjs user
   -d, --diff    : compare the package version across node_modules and nmpjs
   -c, --current : check current package version from (node_modules)
   -l, --latest  : check latest version of a remote package
