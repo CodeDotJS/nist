@@ -3,7 +3,6 @@
 	<img width="160" src="https://raw.githubusercontent.com/CodeDotJS/nist/master/media/nist.png" alt="nist">
 	<br>
 	<br>
-	<br>
 </h1>
 
 > :snowflake: node package installer and informer
