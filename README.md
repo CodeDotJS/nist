@@ -5,7 +5,7 @@
 	<br>
 </h1>
 
-> :snowflake: node package installer and informer
+> :snowflake: a package informer for npm modules
 
 [![Build Status](https://travis-ci.org/CodeDotJS/nist.svg?branch=master)](https://travis-ci.org/CodeDotJS/nist)
 
