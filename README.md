@@ -1,6 +1,6 @@
 <h1 align="center">
 	<br>
-	<img width="160" src="https://raw.githubusercontent.com/CodeDotJS/nist/master/media/nist.png" alt="nist">
+	<img width="360" src="media/nist.png" alt="nist">
 	<br>
 	<br>
 </h1>
@@ -33,16 +33,12 @@ $ sudo npm install --global nist
 ## Usage
 
 ```
- Usage: nist -i <package-name>
+ Usage: nist <command> <package-name>
 
-  Install:
-  -i, --install : install packages
-  -e, --exist   : Check wheather the package is installed or not
-  -g, --global  : install package directly in /home/rishi/node_modules/
-  -u, --update  : update package to latest version
-
-  Publish:
-  -p, --publish : publish your module
+  Availabliity:
+  -e, --exist   : Check wheather the package is installed in /home/{user}/node_modules/
+  -f, --find    : Check wheather the package is present in current working directory
+  -r, --remove  : Delete packages from /home/{user}/node_modules/
 
   Packages:
   -a, --avail   : check is package name is available
