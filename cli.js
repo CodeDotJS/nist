@@ -39,7 +39,7 @@ if (!arg || arg === '--help' || arg === '-h') {
   ${chalk.bold.cyan('Availabliity:')}
   -e, --exist   : Check wheather the package is installed in ${joinPath}
   -f, --find    : Check wheather the package is present in current working directory
-  -r, --rem     : Delete packages from ${joinPath}
+  -r, --remove  : Delete packages from ${joinPath}
 
   ${chalk.bold.cyan('Packages:')}
   -a, --avail   : check is package name is available
