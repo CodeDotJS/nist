@@ -1,7 +1,7 @@
 {
   "name": "nist",
   "version": "1.0.0",
-  "description": "a package informer for npm modules",
+  "description": "a package informer for npm modules and more",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -25,11 +25,26 @@
     "cli",
     "npm",
     "install",
-    "npm-install",
+    "package",
+    "download",
+    "stats",
+    "count",
+    "inform",
+    "informer",
+    "about",
+    "node",
+    "current",
+    "available",
+    "packages-by",
+    "remove",
+    "exists",
+    "find",
+    "boilerplate",
+    "modules",
+    "api",
     "better",
     "update",
-    "find",
-    "publish"
+    "find"
   ],
   "dependencies": {
     "chalk": "^1.1.3",
