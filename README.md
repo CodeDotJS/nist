@@ -5,7 +5,7 @@
 	<br>
 </h1>
 
-> :snowflake: a package informer for npm modules
+> :snowflake: a package informer for npm modules and more
 
 [![Build Status](https://travis-ci.org/CodeDotJS/nist.svg?branch=master)](https://travis-ci.org/CodeDotJS/nist)
 
@@ -37,8 +37,15 @@ $ sudo npm install --global nist
 
   Availabliity:
   -e, --exist   : Check wheather the package is installed in /home/{user}/node_modules/
-  -f, --find    : Check wheather the package is present in current working directory
-  -r, --remove  : Delete packages from /home/{user}/node_modules/
+  -f, --find    : Check wheather the package is present working directory
+
+  Remove:
+  -rm, --remove : Delete packages from /home/{user}/node_modules/
+  -rl, --remLoc : Delete packages form working directory
+
+  Boilerplates: 
+  -m, --api     : Boilerplate for developing node modules
+  -g, --cli     : Boilerplate for cli apps
 
   Packages:
   -a, --avail   : check is package name is available
