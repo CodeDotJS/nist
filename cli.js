@@ -35,15 +35,11 @@ if (!arg || arg === '--help' || arg === '-h') {
 	console.log(
 		`
  Usage: nist <command> <package-name>
- 
-  ${chalk.bold.cyan('Install:')}
-  -i, --install : install packages
-  -e, --exist   : Check wheather the package is installed or not
-  -g, --global  : install package directly in ${joinPath}
-  -u, --update  : update package to latest version
 
-  ${chalk.bold.cyan('Publish:')}
-  -p, --publish : publish your module
+  ${chalk.bold.cyan('Availabliity:')}
+  -e, --exist   : Check wheather the package is installed in ${joinPath}
+  -f, --find    : Check wheather the package is present in current working directory
+  -r, --rem     : Delete packages from ${joinPath}
 
   ${chalk.bold.cyan('Packages:')}
   -a, --avail   : check is package name is available
@@ -66,33 +62,6 @@ if (!arg || arg === '--help' || arg === '-h') {
   -v, --version : display version
   -h, --help    : dispaly help
 		`);
-}
-
-if (arg === '-i' || arg === '--install') {
-	const putMess = `${pre}${chalk.green.bold('run')} ${chalk.bold.cyan('nist -u')} ${chalk.bold.cyan(getArg)} ${chalk.green.bold('to update the package')}\n`;
-
-	dns.lookup('npmjs.com', err => {
-		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
-			process.exit(1);
-		}
-	});
-
-	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
-		process.exit(1);
-	}
-
-	if (!fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`installing ${chalk.bold(getArg)} - please wait!`)}\n`);
-		// continue process...
-	}
-
-	if (fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.bold.cyan(`Package is already installed`)}\n`);
-		console.log(`${putMess}`);
-		process.exit(1);
-	}
 }
 
 if (arg === '--exist' || arg === '-e') {
@@ -119,6 +88,7 @@ if (arg === '-a' || arg === '--avail') {
 			process.exit(1);
 		}
 	});
+
 	logUpdate(`\n${pre}${chalk.dim(`Checking whether ${chalk.bold(getArg)} is available or not. Please wait`)}\n`);
 
 	if (!getArg) {
@@ -140,6 +110,7 @@ if (arg === '-a' || arg === '--avail') {
 
 if (arg === '-b' || arg === '--by') {
 	logUpdate(`\n${pre}${chalk.dim(`Fetching packages count. Please wait`)}\n`);
+
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
 			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
@@ -159,8 +130,10 @@ if (arg === '-b' || arg === '--by') {
 				inf.push(`${prefix} has ${chalk.bold(user[key])}`);
 			}
 		};
+
 		logUpdate();
 		packageVersion(`${pre}NPM user ${chalk.bold(getArg)}`, 'packages');
+
 		console.log(inf.join('\n'));
 		console.log();
 	});
@@ -186,16 +159,21 @@ if (arg === '--diff' || arg === '-d') {
 
 	if (fs.existsSync(fullPath)) {
 		logUpdate(`\n${pre}${chalk.dim(`Comparing package version. Please wait`)}\n`);
+
 		const homePackage = require(fullPath + '/package.json').version;
+
 		curver(process.argv[3]).then(user => {
 			const inf = [];
+
 			const packageVersion = (prefix, key) => {
 				if (user[key]) {
 					inf.push(`${prefix} is ${chalk.bold(user[key])} and you using version ${chalk.bold(homePackage)}`);
 				}
 			};
+
 			logUpdate();
 			packageVersion(`${pre}Latest version of ${chalk.bold(getArg)}`, 'version');
+
 			console.log(inf.join('\n'));
 			console.log();
 		});
@@ -224,7 +202,9 @@ if (arg === '--latest' || arg === '-l') {
 			process.exit(1);
 		}
 	});
+
 	logUpdate(`\n${pre}${chalk.dim(`Fetching ${chalk.bold(getArg)}\'s latest version from npmjs`)}\n`);
+
 	curver(getArg).then(user => {
 		const inf = [];
 		const packageVersion = (prefix, key) => {
@@ -232,8 +212,10 @@ if (arg === '--latest' || arg === '-l') {
 				inf.push(`${prefix} : ${chalk.bold(user[key])}`);
 			}
 		};
+
 		logUpdate();
 		packageVersion(`${pre}Latest version of ${chalk.bold(getArg)}`, 'version');
+
 		console.log(inf.join('\n'));
 		console.log();
 	});
@@ -245,6 +227,7 @@ if (arg === '--latest' || arg === '-l') {
 
 if (arg === '--stat' || arg === '-s') {
 	logUpdate(`\n${pre}${chalk.dim('Fetching download stats from npmjs')}\n`);
+
 	packstat(getArg).then(user => {
 		const inf = [];
 		const packageRow = (prefix, key) => {
@@ -252,13 +235,16 @@ if (arg === '--stat' || arg === '-s') {
 				inf.push(`${prefix}➠ ${user[key]}`);
 			}
 		};
+
 		logUpdate();
 		packageRow(`${pre}Last Day    `, 'lastDay');
 		packageRow(`${pre}Last Week   `, 'lastWeek');
 		packageRow(`${pre}Last Month  `, 'lastMonth');
+
 		console.log(inf.join('\n'));
 		console.log();
 	});
+
 	if (!getArg) {
 		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
 	}
@@ -266,24 +252,30 @@ if (arg === '--stat' || arg === '-s') {
 
 if (arg === '--total' || arg === '-t') {
 	logUpdate(`\n${pre}${chalk.dim(`Fetching total releases of ${chalk.bold(getArg)} from npmjs. Please wait`)}\n`);
+
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
 			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
 			process.exit(1);
 		}
 	});
+
 	tr(getArg).then(user => {
 		const inf = [];
+
 		const countRow = (prefix, key) => {
 			if (user[key]) {
 				inf.push(`${prefix}${chalk.bold(user[key])}${chalk.bold(' releases')}`);
 			}
 		};
+
 		logUpdate();
 		countRow(`${pre}${chalk.bold(getArg)} has total `, 'releases');
+
 		console.log(inf.join('\n'));
 		console.log();
 	});
+
 	if (!getArg) {
 		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
 	}
@@ -296,8 +288,10 @@ if (arg === '--what' || arg === '-w') {
 			process.exit(1);
 		}
 	});
+
 	if (!fs.existsSync(fullPath)) {
 		logUpdate(`\n${pre}${chalk.dim(`Pakcage ${chalk.bold(getArg)} is not installed. Fetching it's description from npmjs`)}\n`);
+
 		whatiz(getArg).then(user => {
 			const inf = [];
 			const countRow = (prefix, key) => {
@@ -305,8 +299,10 @@ if (arg === '--what' || arg === '-w') {
 					inf.push(`${prefix}:  ${user[key]}`);
 				}
 			};
+
 			logUpdate();
 			countRow(`${pre}${getArg}  `, 'info');
+
 			console.log(inf.join('\n'));
 			console.log();
 		});
@@ -327,15 +323,20 @@ if (arg === '--node' || arg === '-n') {
 
 if (arg === '--nolat' || arg === '-z') {
 	logUpdate(`\n${pre}${chalk.dim(`Fetching latest node version from ${chalk.bold(`nodejs.org`)}. Please Wait`)}\n`);
+
 	const url = 'http://nodejs.org/dist/latest/SHASUMS256.txt';
+
 	http.get(url, res => {
 		let body = '';
+
 		res.on('data', chunk => {
 			body += chunk;
 		});
+
 		res.on('end', () => {
 			let latestVersion = /node-v(\d+\.\d+\.\d+)/.exec(body);
 			latestVersion = latestVersion && latestVersion[1];
+
 			logUpdate(`\n${pre}${chalk.bold.cyan('Latest node version:', latestVersion)}\n`);
 		});
 	}).on('error', err => {
