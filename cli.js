@@ -20,10 +20,13 @@ const arg = process.argv[2];
 const getArg = process.argv[3];
 
 const getDir = os.homedir();
+const curDir = process.cwd();
 
 const addPath = '/node_modules/';
 const joinPath = `${getDir}${addPath}`;
-const fullPath = joinPath + getArg;
+const fullPath = `${joinPath}${getArg}`;
+const consPath = `${curDir}${addPath}`;
+const dirPath = `${curDir}${addPath}${getArg}`;
 
 const url = 'https://npmjs.com/package/' + getArg;
 
@@ -38,8 +41,15 @@ if (!arg || arg === '--help' || arg === '-h') {
 
   ${chalk.bold.cyan('Availabliity:')}
   -e, --exist   : Check wheather the package is installed in ${joinPath}
-  -f, --find    : Check wheather the package is present in current working directory
-  -r, --remove  : Delete packages from ${joinPath}
+  -f, --find    : Check wheather the package is present working directory
+
+  ${chalk.bold.cyan('Remove:')}
+  -rm, --remove : Delete packages from ${joinPath}
+  -rl, --remLoc : Delete packages form working directory
+
+  ${chalk.bold.cyan('Boilerplates: ')}
+  -m, --api     : Boilerplate for developing node modules
+  -g, --cli     : Boilerplate for cli apps
 
   ${chalk.bold.cyan('Packages:')}
   -a, --avail   : check is package name is available
@@ -78,6 +88,21 @@ if (arg === '--exist' || arg === '-e') {
 
 	if (fs.existsSync(fullPath)) {
 		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(getArg)} is available in ${chalk.bold(joinPath)}`)}\n`);
+	}
+}
+
+if (arg === '--find' || arg === '-f') {
+	if (!getArg) {
+		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		process.exit(1);
+	}
+
+	if (!fs.existsSync(dirPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`Sorry! package ${chalk.bold(getArg)} is not available in ${consPath}`)}\n`);
+	}
+
+	if (fs.existsSync(dirPath)) {
+		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(getArg)} is available in ${consPath}`)}\n`);
 	}
 }
 
@@ -153,7 +178,7 @@ if (arg === '--diff' || arg === '-d') {
 	}
 
 	if (!fs.existsSync(fullPath)) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package ${chalk.bold.green(getArg)} does not exists`)}\n`);
+		logUpdate(`\n${pre}${chalk.bold.red(`Package ${chalk.bold.green(getArg)} does not exist`)}\n`);
 		process.exit(1);
 	}
 
@@ -232,7 +257,7 @@ if (arg === '--stat' || arg === '-s') {
 		const inf = [];
 		const packageRow = (prefix, key) => {
 			if (user[key]) {
-				inf.push(`${prefix}➠ ${user[key]}`);
+				inf.push(`${prefix} : ${user[key]}`);
 			}
 		};
 
