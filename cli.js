@@ -37,14 +37,14 @@ const pre = `${chalk.bold.cyan('›')} `;
 if (!arg || arg === '--help' || arg === '-h') {
 	console.log(
 		`
- Usage: nist <command> <package-name>
+ Usage: nist <command> | <command> <package-name>
 
   ${chalk.bold.cyan('Availabliity:')}
   -e, --exist   : Check wheather the package is installed in ${joinPath}
   -f, --find    : Check wheather the package is present working directory
 
   ${chalk.bold.cyan('Boilerplates: ')}
-  -m, --api     : Boilerplate for developing node modules
+  -m, --mod     : Boilerplate for developing node modules
   -g, --cli     : Boilerplate for cli apps
 
   ${chalk.bold.cyan('Packages:')}
@@ -100,6 +100,20 @@ if (arg === '--find' || arg === '-f') {
 	if (fs.existsSync(dirPath)) {
 		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(getArg)} is available in ${chalk.bold(consPath)}`)}\n`);
 	}
+}
+
+if (arg === '-m' || arg === '--mod') {
+	logUpdate(` \n ${pre}${chalk.dim(`Status  :  Pending\n\n ${pre}Type    :  for node modules`)}\n`);
+
+	dns.lookup('github.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		} else {
+			exec('curl -fsSL https://github.com/sindresorhus/node-module-boilerplate/archive/master.tar.gz | tar -xz --strip-components=2 node-module-boilerplate-master/cli-boilerplate');
+			logUpdate(` \n ${pre}Status  :  Finished\n\n ${pre}Check files at - ${curDir}\n`);
+		}
+	});
 }
 
 if (arg === '-a' || arg === '--avail') {
