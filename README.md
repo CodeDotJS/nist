@@ -19,6 +19,13 @@ Prevents user from re-installing packages, if the package is available in `os.ho
 
 You can do most of the thing from __`nist`__ which you do by visiting `npmjs.com`
 
+- __`Save time :`__
+
+With `nist` you can download boilerplates for developing your project.
+
+- __`Extra :`__
+
+Almost everything is extra :smiley:
 
 ## Install
 
@@ -33,14 +40,14 @@ $ sudo npm install --global nist
 ## Usage
 
 ```
- Usage: nist <command> <package-name>
+ Usage: nist <command> | <command> <package-name>
 
   Availabliity:
-  -e, --exist   : Check wheather the package is installed in /home/{user}/node_modules/
+  -e, --exist   : Check wheather the package is installed in /home/rishi/node_modules/
   -f, --find    : Check wheather the package is present working directory
 
   Boilerplates: 
-  -m, --api     : Boilerplate for developing node modules
+  -m, --mod     : Boilerplate for developing node modules
   -g, --cli     : Boilerplate for cli apps
 
   Packages:
@@ -81,12 +88,15 @@ __Answer :__ Some features which are missing in `npm` are :
 
 &nbsp; - `Total release of a node package`
 
+## Boilerplate
+
+`The boilerplate provided by` __`nist`__ `is developed by` - [Sindre Sorhus](https://github.com/sindresorhus)
 
 ## Related
 
 - [np](https://github.com/sindresorhus/np) : A better npm publish
 
-## PS
+## Project
 
 - This is just my hobby project. I'm trying to do some experiments. That's all.
 
