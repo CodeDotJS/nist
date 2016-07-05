@@ -39,10 +39,6 @@ $ sudo npm install --global nist
   -e, --exist   : Check wheather the package is installed in /home/{user}/node_modules/
   -f, --find    : Check wheather the package is present working directory
 
-  Remove:
-  -rm, --remove : Delete packages from /home/{user}/node_modules/
-  -rl, --remLoc : Delete packages form working directory
-
   Boilerplates: 
   -m, --api     : Boilerplate for developing node modules
   -g, --cli     : Boilerplate for cli apps
