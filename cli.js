@@ -43,10 +43,6 @@ if (!arg || arg === '--help' || arg === '-h') {
   -e, --exist   : Check wheather the package is installed in ${joinPath}
   -f, --find    : Check wheather the package is present working directory
 
-  ${chalk.bold.cyan('Remove:')}
-  -rm, --remove : Delete packages from ${joinPath}
-  -rl, --remLoc : Delete packages form working directory
-
   ${chalk.bold.cyan('Boilerplates: ')}
   -m, --api     : Boilerplate for developing node modules
   -g, --cli     : Boilerplate for cli apps
@@ -98,11 +94,11 @@ if (arg === '--find' || arg === '-f') {
 	}
 
 	if (!fs.existsSync(dirPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Sorry! package ${chalk.bold(getArg)} is not available in ${consPath}`)}\n`);
+		logUpdate(`\n${pre}${chalk.dim(`Sorry! package ${chalk.bold(getArg)} is not available in ${chalk.bold(consPath)}`)}\n`);
 	}
 
 	if (fs.existsSync(dirPath)) {
-		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(getArg)} is available in ${consPath}`)}\n`);
+		logUpdate(`\n${pre}${chalk.dim(`Package ${chalk.bold(getArg)} is available in ${chalk.bold(consPath)}`)}\n`);
 	}
 }
 
