@@ -44,7 +44,7 @@ if (!arg || arg === '--help' || arg === '-h') {
   -f, --find    : Check wheather the package is present working directory
 
   ${chalk.bold.cyan('Boilerplates: ')}
-  -m, --mod     : Boilerplate for developing node modules
+  -m, --mod     : Boilerplate for developing node modules <complete>
   -g, --cli     : Boilerplate for cli apps
 
   ${chalk.bold.cyan('Packages:')}
@@ -104,6 +104,20 @@ if (arg === '--find' || arg === '-f') {
 
 if (arg === '-m' || arg === '--mod') {
 	logUpdate(` \n ${pre}${chalk.dim(`Status  :  Pending\n\n ${pre}Type    :  for node modules`)}\n`);
+
+	dns.lookup('github.com', err => {
+		if (err && err.code === 'ENOTFOUND') {
+			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			process.exit(1);
+		} else {
+			exec('curl -fsSL https://github.com/sindresorhus/node-module-boilerplate/archive/master.tar.gz | tar -xz --strip-components=2 node-module-boilerplate-master/boilerplate');
+			logUpdate(` \n ${pre}Status  :  Finished\n\n ${pre}Check files at - ${curDir}\n`);
+		}
+	});
+}
+
+if (arg === '-g' || arg === '--cli') {
+	logUpdate(` \n ${pre}${chalk.dim(`Status  :  Pending\n\n ${pre}Type    :  for node CLI tools`)}\n`);
 
 	dns.lookup('github.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
