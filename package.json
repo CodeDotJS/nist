@@ -1,6 +1,6 @@
 {
   "name": "nist",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "a package informer for npm modules and more",
   "license": "MIT",
   "repository": {
