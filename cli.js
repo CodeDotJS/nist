@@ -18,6 +18,7 @@ const got = require('got');
 const updateNotifier = require('update-notifier');
 
 const pkg = require('./package.json');
+
 updateNotifier({pkg}).notify();
 
 const arg = process.argv[2];
@@ -52,7 +53,7 @@ if (!arg || arg === '--help' || arg === '-h') {
   -g, --cli     : Boilerplate for cli apps
 
   ${chalk.bold.cyan('Packages:')}
-  -a, --avail   : check is package name is available
+  -a, --avail   : check if package name is available
   -b, --by      : total packages published by a npmjs user
   -d, --diff    : compare the package version across node_modules and nmpjs
   -c, --current : check current package version from (node_modules)
