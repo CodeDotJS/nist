@@ -15,6 +15,10 @@ const whatiz = require('whatiz');
 const curver = require('curver');
 const pb = require('packages-by');
 const got = require('got');
+const updateNotifier = require('update-notifier');
+
+const pkg = require('./package.json');
+updateNotifier({pkg}).notify();
 
 const arg = process.argv[2];
 const getArg = process.argv[3];
