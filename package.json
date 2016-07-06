@@ -58,7 +58,8 @@
     "packstat": "*",
     "pinkie-promise": "^2.0.1",
     "total-release": "*",
-    "whatiz": "*"
+    "whatiz": "*",
+    "update-notifier": "^1.0.1"
   },
   "devDependencies": {
     "ava": "*",
