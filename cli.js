@@ -47,33 +47,33 @@ if (!arg || arg === '--help' || arg === '-h') {
  Usage: nist <command> | <command> <package-name>
 
   ${chalk.bold.cyan('Availabliity:')}
-  -e, --exist   : Check wheather the package is installed in ${joinPath}
-  -f, --find    : Check wheather the package is present working directory
+  -e, --exist        Check wheather the package is installed in ${joinPath}
+  -f, --find         Check wheather the package is present working directory
 
   ${chalk.bold.cyan('Boilerplates: ')}
-  -m, --mod     : Boilerplate for developing node modules <complete>
-  -g, --cli     : Boilerplate for cli apps
+  -m, --mod          Boilerplate for developing node modules <complete>
+  -g, --cli          Boilerplate for cli apps
 
   ${chalk.bold.cyan('Packages:')}
-  -a, --avail   : check if package name is available
-  -b, --by      : total packages published by a npmjs user
-  -d, --diff    : compare the package version across node_modules and nmpjs
-  -c, --current : check current package version from (node_modules)
-  -l, --latest  : check latest version of a remote package
+  -a, --avail        Check if package name is available
+  -b, --by           Total packages published by a npmjs user
+  -d, --diff         Compare the package version across node_modules and nmpjs
+  -c, --current      Check current package version from (node_modules)
+  -l, --latest       Check latest version of a remote package
 
   ${chalk.bold.cyan('Infos:')}
-  -s, --stat    : get monthy, weekly and daily download counts
-  -t, --total   : total release of a node packge.
-  -w, --what    : get package description from node_modules or npmjs
+  -s, --stat         Get monthy, weekly and daily download counts
+  -t, --total        Total release of a node packge.
+  -w, --what         Get package description from node_modules or npmjs
 
   ${chalk.bold.cyan('Version:')}
-  -n, --node    : get current node version
-  -z, --nolat   : get the latest node version from nodejs.org
-  -nv, --npm    : get npm version
+  -n, --node         Get current node version
+  -z, --nolat        Get the latest node version from nodejs.org
+  -nv, --npm         Get npm version
 
   ${chalk.bold.cyan('Nist :')}
-  -v, --version : display version
-  -h, --help    : dispaly help
+  -v, --version      Display version
+  -h, --help         Dispaly help
 		`);
 }
 
