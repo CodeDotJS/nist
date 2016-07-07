@@ -38,6 +38,8 @@ const url = 'https://npmjs.com/package/' + getArg;
 const nodeVersion = process.versions.node;
 
 const pre = `${chalk.bold.cyan('›')} `;
+const reqMessage = `${chalk.bold.red(`Package name required`)}`;
+const conMessage = `${chalk.bold.red('Please check your internet connection')}`;
 
 if (!arg || arg === '--help' || arg === '-h') {
 	console.log(
@@ -79,7 +81,7 @@ if (arg === '--exist' || arg === '-e') {
 	const putMess = `${pre}${chalk.bold.cyan('npm install')} ${chalk.bold.cyan(getArg)}`;
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 		process.exit(1);
 	}
 
@@ -94,7 +96,7 @@ if (arg === '--exist' || arg === '-e') {
 
 if (arg === '--find' || arg === '-f') {
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 		process.exit(1);
 	}
 
@@ -112,7 +114,7 @@ if (arg === '-m' || arg === '--mod') {
 
 	dns.lookup('github.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		} else {
 			exec('curl -fsSL https://github.com/sindresorhus/node-module-boilerplate/archive/master.tar.gz | tar -xz --strip-components=2 node-module-boilerplate-master/boilerplate');
@@ -126,7 +128,7 @@ if (arg === '-g' || arg === '--cli') {
 
 	dns.lookup('github.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		} else {
 			exec('curl -fsSL https://github.com/sindresorhus/node-module-boilerplate/archive/master.tar.gz | tar -xz --strip-components=2 node-module-boilerplate-master/cli-boilerplate');
@@ -138,7 +140,7 @@ if (arg === '-g' || arg === '--cli') {
 if (arg === '-a' || arg === '--avail') {
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		}
 	});
@@ -146,7 +148,7 @@ if (arg === '-a' || arg === '--avail') {
 	logUpdate(`\n${pre}${chalk.dim(`Checking whether ${chalk.bold(getArg)} is available or not. Please wait`)}\n`);
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 		process.exit(1);
 	}
 
@@ -167,7 +169,7 @@ if (arg === '-b' || arg === '--by') {
 
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		}
 	});
@@ -196,13 +198,13 @@ if (arg === '-b' || arg === '--by') {
 if (arg === '--diff' || arg === '-d') {
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		}
 	});
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 		process.exit(1);
 	}
 
@@ -245,14 +247,14 @@ if (arg === '--current' || arg === '-c') {
 	}
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red(`Package name required`)}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 	}
 }
 
 if (arg === '--latest' || arg === '-l') {
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		}
 	});
@@ -275,7 +277,7 @@ if (arg === '--latest' || arg === '-l') {
 	});
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 	}
 }
 
@@ -300,7 +302,7 @@ if (arg === '--stat' || arg === '-s') {
 	});
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 	}
 }
 
@@ -309,7 +311,7 @@ if (arg === '--total' || arg === '-t') {
 
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		}
 	});
@@ -331,14 +333,14 @@ if (arg === '--total' || arg === '-t') {
 	});
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 	}
 }
 
 if (arg === '--what' || arg === '-w') {
 	dns.lookup('npmjs.com', err => {
 		if (err && err.code === 'ENOTFOUND') {
-			logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+			logUpdate(`\n${pre}${conMessage}\n`);
 			process.exit(1);
 		}
 	});
@@ -367,7 +369,7 @@ if (arg === '--what' || arg === '-w') {
 	}
 
 	if (!getArg) {
-		logUpdate(`\n${pre}${chalk.bold.red('Package name required')}\n`);
+		logUpdate(`\n${pre}${reqMessage}\n`);
 	}
 }
 
@@ -394,7 +396,7 @@ if (arg === '--nolat' || arg === '-z') {
 			logUpdate(`\n${pre}${chalk.bold.cyan('Latest node version:', latestVersion)}\n`);
 		});
 	}).on('error', err => {
-		logUpdate(`\n${pre}${chalk.bold.red('Please check your internet connection')}\n`);
+		logUpdate(`\n${pre}${conMessage}\n`);
 		process.exit(1);
 		console.error(err);
 	});
